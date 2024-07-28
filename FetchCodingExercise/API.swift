@@ -8,7 +8,7 @@
 import Foundation
 
 class API: ObservableObject {
-    func getMealByID(id: String) async throws -> Meal? {
+    func getMealByID(id: String) async throws -> MealByID? {
         guard let url = URL(string: "https://www.themealdb.com/api/json/v1/1/lookup.php?i=\(id)") else {
             print("Bad URL.")
             return nil
@@ -16,7 +16,7 @@ class API: ObservableObject {
         let urlRequest = URLRequest(url: url)
         do {
             let (data, _) = try await URLSession.shared.data(for: urlRequest)
-            let decodedMeal = try JSONDecoder().decode(Meal.self, from: data)
+            let decodedMeal = try JSONDecoder().decode(MealByID.self, from: data)
             return decodedMeal
         } catch {
             print("Bad data.")
