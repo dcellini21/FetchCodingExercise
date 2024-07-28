@@ -8,14 +8,25 @@
 import SwiftUI
 
 struct ContentView: View {
+    @ObservedObject var api = API()
+    @State private var desserts: Category?
+    @State private var meal: Meal?
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationView {
+            List {
+                ForEach(desserts?.meals ?? [], id: \.strMeal) { meal in
+                    Text("\(meal.strMeal)")
+                }
+            }
+            .navigationTitle("Desserts")
+            .task {
+                do {
+                    desserts = try await api.getDessertsCategory()
+                } catch {
+                    print("Error.")
+                }
+            }
         }
-        .padding()
     }
 }
 
