@@ -14,8 +14,12 @@ class API: ObservableObject {
             return nil
         }
         let urlRequest = URLRequest(url: url)
+        let (data, response) = try await URLSession.shared.data(for: urlRequest)
+        guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
+            print("Bad response.")
+            return nil
+        }
         do {
-            let (data, _) = try await URLSession.shared.data(for: urlRequest)
             let decodedMeal = try JSONDecoder().decode(MealByID.self, from: data)
             return decodedMeal
         } catch {
@@ -30,8 +34,12 @@ class API: ObservableObject {
             return nil
         }
         let urlRequest = URLRequest(url: url)
+        let (data, response) = try await URLSession.shared.data(for: urlRequest)
+        guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
+            print("Bad response.")
+            return nil
+        }
         do {
-            let (data, _) = try await URLSession.shared.data(for: urlRequest)
             let decodedCategory = try JSONDecoder().decode(Category.self, from: data)
             return decodedCategory
         } catch {
